@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input class="form-control" id="key" type="text" value="">
+                    <button id="genBtn" class="generate-btn" onclick="generateKey()">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input class="form-control" id="screen" type="text" value="">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div class="button" onclick="display('7')">7</div>
+                              <div class="button" onclick="display('8')">8</div>
+                              <div class="button" onclick="display('9')">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="display('4')">4</div>
+                              <div class="button" onclick="display('5')">5</div>
+                              <div class="button" onclick="display('6')">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="display('1')">1</div>
+                              <div class="button" onclick="display('2')">2</div>
+                              <div class="button" onclick="display('3')">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button" onclick="backspace()"><</div>
+                                <div class="button" onclick="display('0')">0</div>
+                                <div class="button" onclick="clr()">C</div>
+                            </div>
+                            <div>
+                                <button type="submit" class="submit-btn" onclick="submitted()">Submit</button>
+                                <p class="action-left">3 try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p class="notify" id="not-matched">❌ Pin Didn't Match, Please try again</p>
+            <p class="notify" id="matched">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+    <script>
+        function hideMessage(){
+            var displayMessage = document.getElementsByClassName("notify");
+            for(var i=0;i<2;i++){
+            displayMessage[i].style.display = "none";
+        }
+        }
+        hideMessage();
+       function generateKey(){ 
+           hideMessage();
+            var keyGen=Math.random()*10000;
+            var roundKeyGen=Math.round(keyGen);
+            if(roundKeyGen<1000){
+                generateKey();
+            }
+            else{
+                document.getElementById("key").value=roundKeyGen;
+            }
+        }
+
+    function display(input){
+        hideMessage();
+      var hold=document.getElementById("screen");
+      var displayString=hold.value+input;
+      hold.value=displayString;  
+   }
+   function clr(){
+      document.getElementById("screen").value=" ";
+   }
+   function submitted(){
+       var match = 404;
+       var generatedKey = document.getElementById("key").value;
+       console.log(generatedKey);
+       var givenInput = document.getElementById("screen").value;
+       console.log(givenInput);
+       for(var i=0;i<generatedKey.length;i++){
+                if(generatedKey[i]!=givenInput[i]){
+                    match = -1;
+                   break;
+                }
+                else{
+                    if(i == givenInput.length-1){
+                        match = 0; 
+                    }
+                    else{
+                        continue;
+                    }
+                }
+
+       }
+       console.log(match);
+       printMessage(match);
+   }
+   function printMessage(value){
+       if (value == 0){
+           var matched = document.getElementById("matched");
+           matched.style.display = "block";
+           
+       }
+       else{
+           var notMatched = document.getElementById("not-matched");
+           notMatched.style.display = "block";
+           
+       }
+       refresh();
+   }
+   function refresh(){
+      document.getElementById("screen").value = "";
+   }
+
+    </script>
+</body>
+</html>
